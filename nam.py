@@ -16,10 +16,9 @@ class ExU(nn.Module):
 
     
     def forward(self, x):
-        out = torch.matmul((x - self.bias), torch.exp(self.weight)))
+        out = torch.matmul((x - self.bias), torch.exp(self.weight))
         out = F.relu(out)
-
-	return out
+        return out
 
 
 
@@ -32,8 +31,8 @@ class FeatureNet(nn.Module):
             layers.append(ExU(input_size, s))
             layers.append(nn.Dropout(dropout_rate))
             input_size = s
-        layers.append(Exu(input_size, 1))
-        self.layers = nn.Sequetial(*layers))
+        layers.append(ExU(input_size, 1))
+        self.layers = nn.Sequential(*layers)
 
     def forward(self, x):
         return self.layers(x)
@@ -43,17 +42,16 @@ class NAM(nn.Module):
     def __init__(self, no_features, hidden_sizes, dropout_rate = .2):
         super(NAM, self).__init__()
         self.no_features = no_features
-        feature_nets = [FeatureNet(hidden_sizes, dropout_rate) for _ in range(no_features)]]
+        feature_nets = [FeatureNet(hidden_sizes, dropout_rate) for _ in range(no_features)]
         self.feature_nets = nn.ModuleList(feature_nets)
         self.summation = nn.Linear(no_features, 1)
     
     def forward(self, x):
         y = []
-        for i in range(no_features):
-            y.append(self.feature_nets[i](x[:,i]))
+        for i in range(self.no_features):
+            o = self.feature_nets[i](x[:,i].reshape(-1, 1))            
+            y.append(o)
         y = torch.cat(y, 1)
         out = self.summation(y)
-        out = F.sigmoid(y)
-        
-
- 	return out
+        out = torch.sigmoid(out)
+        return out

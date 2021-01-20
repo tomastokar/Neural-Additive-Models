@@ -1,0 +1,19 @@
+name: PyNam
+channels:
+   - conda-forge
+   - anaconda
+   - pytorch
+dependencies:
+   - python=3.7
+   - numpy
+   - scipy
+   - pandas
+   - scikit-learn
+   - statsmodels
+   - pytorch=1.5
+   - torchvision
+   - psycopg2
+   - python-dotenv
+   - pip
+   - pyyaml
+   - sqlalchemy
