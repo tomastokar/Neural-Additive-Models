@@ -34,6 +34,7 @@ class FeatureNet(nn.Module):
         layers.append(ExU(input_size, 1))
         self.layers = nn.Sequential(*layers)
 
+
     def forward(self, x):
         return self.layers(x)
 
@@ -45,6 +46,7 @@ class NAM(nn.Module):
         feature_nets = [FeatureNet(hidden_sizes, dropout_rate) for _ in range(no_features)]
         self.feature_nets = nn.ModuleList(feature_nets)
         self.summation = nn.Linear(no_features, 1)
+
     
     def forward(self, x):
         y = []
