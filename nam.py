@@ -34,7 +34,6 @@ class FeatureNet(nn.Module):
         layers.append(ExU(input_size, 1))
         self.layers = nn.Sequential(*layers)
 
-
     def forward(self, x):
         return self.layers(x)
 
@@ -56,4 +55,4 @@ class NAM(nn.Module):
         y = torch.cat(y, 1)
         out = self.summation(y)
         out = torch.sigmoid(out)
-        return out
+        return out, y
