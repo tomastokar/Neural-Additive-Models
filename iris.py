@@ -1,15 +1,14 @@
-import time
 import torch
 import pandas as pd
 import torch.nn as nn
 
 from torch.utils.data import Dataset, DataLoader
 from sklearn.model_selection import train_test_split
+from sklearn.datasets import load_iris
 from plots import plot_roc_curve
 from nam import NAM, FFNN
 
-
-class CompasData(Dataset):
+class IrisData(Dataset):
     def __init__(self, X, y):
         assert len(X) == len(y)
         n, m = X.shape
@@ -41,48 +40,44 @@ def train_model(model, data, max_epochs = 10, batch_size = 32, learning_rate = 1
     )    
     
     loss = nn.BCELoss()
-    no_batches = len(loader)
     for epoch in range(max_epochs):
-        start = time.time()
         for i, (x, y) in enumerate(loader):
             optimizer.zero_grad()                        
             y_, _ = model(x)
-            err = loss(y_, y)
+            err = loss(y_, y.reshape(-1, 1))
             
             err.backward()
             optimizer.step()
             
             if verbosity is not None:
                 if i % verbosity == 0:
-                    print('Epoch: {0}/{1};\t Batch: {2}/{3};\t Err: {4:1.3f}'.format(epoch, max_epochs, i, no_batches, err.item()))
+                    print(epoch, i, err.item())
 
-        print('\n\t Epoch finished in {:1.2f} seconds!\n'.format(time.time() - start))
 
 
 def main():
-    data = pd.read_csv('./data/compas/compas.csv')    
-    data = data.values
-    X, y = data[:,:-1], data[:, -1]
+    iris = load_iris()
+    X, y = iris['data'], iris['target']    
+    y = (y == 1) * 1
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1)
 
-    data_train = CompasData(X_train, y_train)
-    data_test = CompasData(X_test, y_test)
+    data_train = IrisData(X_train, y_train)
    
-    model = NAM(6, [64, 64, 32], dropout_rate = 0.1, feature_dropout=0.0, use_exu=False)
-    # model = FFNN(6, [100] * 10, dropout_rate=0.1)
+    # model = NAM(6, [128, 128, 128], 0.01)
+    model = FFNN(4, [16] * 3)
     model = model.double()
 
     train_model(
         model, 
         data_train, 
         batch_size = 16, 
-        max_epochs=10, 
-        verbosity=20, 
-        learning_rate=2e-4
+        max_epochs=1000, 
+        verbosity=5, 
+        learning_rate=0.01
     )
 
-    model.eval()
-    y_, _ = model(data_test.X)
+    data_test = IrisData(X_test, y_test)
+    y_, p = model(data_test.X)
 
     preds = y_.flatten().detach().numpy()
     targets = data_test.y.numpy()

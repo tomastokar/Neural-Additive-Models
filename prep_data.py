@@ -1,9 +1,9 @@
+import sqlite3
 import pickle as pkl
 import numpy as np
 import pandas as pd
-import sqlite3
-
 from sklearn.preprocessing import LabelEncoder
+
 
 def fetch_data(fname):
     # Establish connection
@@ -22,27 +22,16 @@ def fetch_data(fname):
     return data
 
 
-def calc_stay_length(data):  
-    # Data copy
-    d = data.copy()  
-
+def preprocess_data(data):
+    # Take a copy
+    d = data.copy()
+    
     # Lenght of stays
     dt = pd.to_datetime(d['c_jail_out']) - pd.to_datetime(d['c_jail_in'])
     dt = dt / np.timedelta64(1, 'D')  
     dt = np.ceil(dt)
 
-    # Add and remove columns    
-    d.drop(columns = ['c_jail_in', 'c_jail_out'], inplace = True)
-    d.insert(1, 'length_of_stay', dt)
-    
-    return d
-
-
-def get_charge_degree(data):
-    # Copy data
-    d = data.copy()
-
-    # Get degree
+    # Get charge degree
     deg = d['c_charge_degree'].map(
         {
             '(F1)' : 'F', 
@@ -63,25 +52,24 @@ def get_charge_degree(data):
         }
     )
 
-    # Add and remove columns
-    d.drop(columns = ['c_charge_degree'])
-    d.insert(1, 'charge_degree', deg)
-    
+    # Add columns
+    d['length_of_stay'] = dt
+    d['charge_degree'] = deg
+
+     # Subset columns and drop NaNs
+    cols = ['age', 'race', 'sex', 'priors_count', 'charge_degree', 'length_of_stay', 'is_recid']
+    d = d[cols]
+    d = d[d['charge_degree'] != 'X']
+    d = d[d['is_recid'] >= 0]
+    d = d.dropna()
+       
     return d
 
 
 def main():    
     # Fetch and pre-process data
     d = fetch_data('./data/compas/compas.db')['people']
-    d = calc_stay_length(d)
-    d = get_charge_degree(d)
-
-    # Subset columns and drop NaNs
-    cols = ['age', 'race', 'sex', 'priors_count', 'charge_degree', 'length_of_stay', 'is_recid']
-    d = d[cols]
-    d = d[d['charge_degree'] != 'X']
-    d = d[d['is_recid'] >= 0]
-    d = d.dropna()
+    d = preprocess_data(d)
 
     # Encode data
     encoders = {}
