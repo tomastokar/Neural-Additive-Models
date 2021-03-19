@@ -46,13 +46,12 @@ class ReLU(nn.Module):
 class FeatureNet(nn.Module):
     def __init__(self, hidden_sizes, dropout_rate = .2, use_exu = True):
         super(FeatureNet, self).__init__()
-        layers = []
-        input_size = 1
-        for i, s in enumerate(hidden_sizes):
-            if i == 0:
-                layers.append(ExU(input_size, s) if use_exu else ReLU(input_size, s))
-            else:
-                layers.append(ReLU(input_size, s))
+        layers = [
+            ExU(1, hidden_sizes[0]) if use_exu else ReLU(1, hidden_sizes[0])
+        ]
+        input_size = hidden_sizes[0]
+        for s in hidden_sizes[1:]:
+            layers.append(ReLU(input_size, s))
             layers.append(nn.Dropout(dropout_rate))
             input_size = s
         layers.append(nn.Linear(input_size, 1, bias = False))

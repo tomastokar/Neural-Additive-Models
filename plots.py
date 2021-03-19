@@ -15,3 +15,6 @@ def plot_roc_curve(preds, targets, fname = './results/roc_curve.png'):
     plt.ylabel('True Positive Rate')
     plt.legend(loc="lower right")
     plt.savefig(fname)
+
+
+def plot_shape_functions():
