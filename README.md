@@ -29,7 +29,13 @@ conda activate PyNam
 ```
 
 ## COMPAS
+COMPAS demo can be run by:
 
+```
+python compas_demo.py
+```
+
+![compas_roc](results/roc_curve.png?raw=true "COMPAS - ROC curve")
 
 ## TODO
     - German Credit Dataset

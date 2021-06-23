@@ -1,10 +1,11 @@
+import yaml
 import numpy as np
 import pandas as pd
 
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 
-from src.nam import NAM
+from nam import NAM
 from src.utils import CompasData, train_model, eval_model
 from src.plots import plot_roc_curves, plot_shape_functions
 from responsibly.dataset import COMPASDataset
@@ -39,23 +40,20 @@ def decode_data(data, encoders):
     return data
 
     
-
-def main():
+def main(args):
     data = load_data()
     cols = data.columns
 
     features, response = cols[:-1], cols[-1]
     data, encoders = encode_data(data)
 
-    no_replicates = 20
-    no_testings = 500
     results = []
-    for i in range(no_replicates):        
+    for i in range(args['no_replicates']):        
         print('\t===== Replicate no. {} =====\n'.format(i + 1))
 
         d_train, d_test = train_test_split(
             data, 
-            test_size=no_testings
+            test_size=args['test_size']
         )    
 
         data_train = CompasData(
@@ -68,30 +66,11 @@ def main():
             d_test[response].values
         )        
     
-        model = NAM(
-            6, 
-            [64, 64, 32],
-            dropout_rate = 0.1, 
-            feature_dropout=0.05, 
-            use_exu=False
-        )
+        model = NAM(**args['model'])
         model = model.double()
 
-        train_model(
-            model, 
-            data_train, 
-            batch_size = 16, 
-            max_epochs=20, 
-            verbosity=20, 
-            learning_rate=2e-4,
-            weight_decay=0.,
-            output_penalty=0.2
-        )
-
-        y_, p_ = eval_model(
-            model, 
-            data_test
-        )
+        train_model(model, data_train, **args['training'])
+        y_, p_ = eval_model(model, data_test)
         
         res = (
             pd
@@ -111,4 +90,6 @@ def main():
     plot_shape_functions(results, features)    
 
 if __name__ == '__main__':
-    main()
+    with open('./config.yml', 'r') as f:
+        args = yaml.safe_load(f)
+    main(args['compas'])

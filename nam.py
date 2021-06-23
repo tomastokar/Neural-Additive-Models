@@ -80,22 +80,3 @@ class NAM(nn.Module):
         out = torch.sum(y, axis = -1) + self.bias
         out = torch.sigmoid(out)
         return out, y
-
-
-class FFNN(nn.Module):
-    def __init__(self, no_features, hidden_sizes, dropout_rate = 0.2):
-        super(FFNN, self).__init__()
-        input_size = no_features
-        lin_layers = []
-        for s in hidden_sizes:
-            lin_layers.append(nn.Linear(input_size, s))
-            lin_layers.append(nn.ReLU())
-            lin_layers.append(nn.Dropout(dropout_rate))
-            input_size = s
-        lin_layers.append(nn.Linear(input_size, 1))
-        self.lin_layers = nn.Sequential(*lin_layers)
-    
-    def forward(self, x):
-       y = self.lin_layers(x)
-       out = torch.sigmoid(y)        
-       return out, y

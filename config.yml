@@ -1,0 +1,19 @@
+compas:
+  no_replicates : 100
+  test_size : 500
+  model:
+    no_features : 6
+    hidden_sizes : 
+      - 64
+      - 64
+      - 32
+    dropout_rate : 0.1
+    feature_dropout : 0.05
+    use_exu : False
+  training:
+    batch_size : 16
+    max_epochs : 20
+    verbosity : 20
+    learning_rate : 2.e-4
+    weight_decay : 0.
+    output_penalty : .2
