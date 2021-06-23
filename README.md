@@ -37,6 +37,8 @@ python compas_demo.py
 
 ![compas_roc](results/roc_curve.png?raw=true "COMPAS - ROC curve")
 
+![compas_roc](results/shape_functions.png?raw=true "COMPAS - shape functions")
+
 ## TODO
     - German Credit Dataset
     - Adults Dataset
