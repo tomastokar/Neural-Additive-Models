@@ -80,7 +80,7 @@ def plot_shape_functions(results, features, nrows = 1, size = (8, 10), fname = '
             x.plot.hist(alpha = .15, ax = twin)
                     
         axes[r, c].grid(True)
-        axes[r, c].set_ylabel('Partial logit')
+        axes[r, c].set_ylabel('Shape functions')
         axes[r, c].set_xlabel(feature.replace('_', ' '))
 
     plt.tight_layout()

@@ -28,19 +28,17 @@ You can then activate the environment:
 conda activate PyNam
 ```
 
-## COMPAS
+## Running
 COMPAS demo can be run by:
-
 ```
 python compas_demo.py
 ```
 
-Obtained results include receiver oparating characteristic curve: 
+<p align="justify">
+A routine where NAM model is repeatedly initialized, trained and subsequently tested using randomly selected subsets of data will be executed. Obtained results include visualization of the receiver oparating characteristic curve and visualization of the shape functions, which describe how individual features affect prediction of the model.
+</p>
 
 ![compas_roc](results/roc_curve.png?raw=true "COMPAS - ROC curve")
-
-And partials (also refered to as shape functions), which describe how individual features
-affect prediction of the model.
 
 ![compas_roc](results/shape_functions.png?raw=true "COMPAS - shape functions")
 
