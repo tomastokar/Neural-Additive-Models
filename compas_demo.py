@@ -87,7 +87,7 @@ def main(args):
     results = decode_data(results, encoders)
 
     plot_roc_curves(results, 'is_recid_proba', 'is_recid')
-    plot_shape_functions(results, features)    
+    plot_shape_functions(results, features, nrows = 3)    
 
 if __name__ == '__main__':
     with open('./config.yml', 'r') as f:

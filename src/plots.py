@@ -26,11 +26,11 @@ def plot_roc_curves(results, pred_col, resp_col, fname = './results/roc_curve.pn
     plt.savefig(fname)
 
 
-def plot_shape_functions(results, features, nrows = 2, max_k = 10, fname = './results/shape_functions.png'):
+def plot_shape_functions(results, features, nrows = 2, size = (10, 10), fname = './results/shape_functions.png'):
     n = len(features)
     ncols = n // nrows
     plt.clf()
-    fig, axes = plt.subplots(nrows = nrows, ncols = ncols, figsize = (10, 7))
+    fig, axes = plt.subplots(nrows = nrows, ncols = ncols, figsize = size)
     for i, feature in enumerate(features):
         r = i // ncols
         c = i % ncols

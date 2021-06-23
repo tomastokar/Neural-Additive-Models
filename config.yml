@@ -1,5 +1,5 @@
 compas:
-  no_replicates : 100
+  no_replicates : 5
   test_size : 500
   model:
     no_features : 6
@@ -12,7 +12,7 @@ compas:
     use_exu : False
   training:
     batch_size : 16
-    max_epochs : 20
+    max_epochs : 10
     verbosity : 20
     learning_rate : 2.e-4
     weight_decay : 0.
