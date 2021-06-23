@@ -11,8 +11,8 @@ def main():
     X = data.iloc[:,:-1].values
     y = data.iloc[:, -1].values
 
-    preds, partials = [], []
-    cv = KFold(n_splits = 5, shuffle=False)
+    predicts, partials, features, targets = [], [], [], []
+    cv = KFold(n_splits = 3, shuffle=False)
     for i, (train_idx, test_idx) in enumerate(cv.split(X, y)):
 
         print('\t===== Fold no. {} =====\n'.format(i + 1))
@@ -52,14 +52,13 @@ def main():
             data_test
         )
 
-        preds.append(y_)
+        predicts.append(y_)
         partials.append(p_)
-
-    preds = np.concatenate(preds)
-    partials = np.concatenate(partials)
+        features.append(X[test_idx])
+        targets.append(y[test_idx])
     
-    plot_roc_curve(preds, y)
-    plot_shape_functions(partials, X, cols[:-1])    
+    plot_roc_curve(predicts, targets)
+    plot_shape_functions(partials, features, cols[:-1])    
 
 if __name__ == '__main__':
     main()
