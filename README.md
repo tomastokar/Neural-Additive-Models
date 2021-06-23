@@ -29,7 +29,7 @@ conda activate PyNam
 ```
 
 ## Running
-COMPAS demo can be run by:
+COMPAS demo, and analogously other demos, can be run by:
 ```
 python compas_demo.py
 ```
