@@ -3,7 +3,7 @@ Pytorch implementation of neural additive model
 
 ## Description
 <p align="justify">
-This repository contains Pytorch implementation of neural additive models (NAMs) as previously described in [Agarwal et al., 2020] along its demonstration across four different datasets obtained from <code>responsibly.ai</code> (https://docs.responsibly.ai/index.html)
+This repository contains Pytorch implementation of neural additive models (NAMs) as previously described in [Agarwal et al., 2020] along its demonstration across four different datasets obtained from <code>responsibly.ai</code> (https://docs.responsibly.ai/index.html) [Barocas et al., 2017].
 </p>
 
 These datasets include:
@@ -54,3 +54,4 @@ Shape functions describe how individual features affect prediction of the model.
 
 ## References
   * Agarwal, Rishabh, et al. "Neural additive models: Interpretable machine learning with neural nets." 2020.
+  * Barocas, Solon, et al. "Fairness in machine learning." 2017.
