@@ -1,5 +1,7 @@
-import numpy as np
+import matplotlib
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
+import numpy as np
 from sklearn.metrics import roc_curve, auc
 
 def plot_roc_curve(preds, targets, fname = './results/roc_curve.png'):

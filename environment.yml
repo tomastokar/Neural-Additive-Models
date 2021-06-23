@@ -14,6 +14,9 @@ dependencies:
    - torchvision
    - psycopg2
    - python-dotenv
-   - pip
    - pyyaml
    - sqlalchemy
+   - matplotlib
+   - pip
+   - pip:
+     - git+https://github.com/ResponsiblyAI/responsibly.git

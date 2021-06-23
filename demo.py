@@ -1,13 +1,43 @@
 import numpy as np
 import pandas as pd
+
+from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import KFold
+
 from nam import NAM
 from utils import CompasData, train_model, eval_model
 from plots import plot_roc_curve, plot_shape_functions
+from responsibly.dataset import COMPASDataset
+
+def load_data():
+    # Fetch data and subset columns
+    cols = ['sex', 'age','race', 'length_of_stay', 'priors_count', 'c_charge_degree', 'is_recid']
+    compas = COMPASDataset()
+    compas = compas.df
+    compas = compas[cols]
+
+    # Get length of stay in days
+    compas['length_of_stay'] /= np.timedelta64(1, 'D')
+    compas['length_of_stay'] = np.ceil(compas['length_of_stay'])
+
+    # Rename column
+    compas = compas.rename(columns = {'c_charge_degree' : 'charge_degree'})
+    return compas
+
+
+def encode_data(data):
+    encoders = {}
+    for col in ['race', 'sex', 'charge_degree']:
+        encoders[col] = LabelEncoder().fit(data[col])
+        data.loc[:,col] = encoders[col].transform(data[col])    
+    return data, encoders
+
 
 def main():
-    data = pd.read_csv('./data/compas/compas.csv')  
+    data = load_data()
     cols = data.columns
+
+    data, encoders = encode_data(data)
     X = data.iloc[:,:-1].values
     y = data.iloc[:, -1].values
 

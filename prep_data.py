@@ -3,7 +3,7 @@ import pickle as pkl
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
-
+from responsibly.dataset import COMPASDataset
 
 def fetch_data(fname):
     # Establish connection
