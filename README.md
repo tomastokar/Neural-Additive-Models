@@ -3,8 +3,7 @@ Pytorch implementation of neural additive model
 
 ## Description
 <p align="justify">
-This repository contains pytorch implementatin of neural additive models (NAMs) as described in [Agarwal et al.] 
-<code>responsibly</code>
+This repository contains pytorch implementatin of neural additive models (NAMs) as described in [Agarwal et al.] and its demonstration across four different datasets obtained from [responsibly.ai](https://docs.responsibly.ai/index.html).
 </p>
 
 These datasets include:
