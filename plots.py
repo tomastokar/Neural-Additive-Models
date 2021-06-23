@@ -1,22 +1,19 @@
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
-import numpy as np
 from sklearn.metrics import roc_curve, auc
 
-def plot_roc_curve(preds, targets, fname = './results/roc_curve.png'):
-    assert len(preds) == len(targets)
 
+def plot_roc_curves(results, pred_col, resp_col, fname = './results/roc_curve.png'):
     plt.clf()
     plt.figure()
-    for i in range(len(preds)):
-        fpr, tpr, _ = roc_curve(targets[i], preds[i])      
+    
+    for _, res in results.groupby('replicate'):
+        fpr, tpr, _ = roc_curve(res[resp_col], res[pred_col])      
         roc_auc = auc(fpr, tpr)    
         plt.plot(fpr, tpr, '-', color='orange', lw=0.5)
-    
-    t = np.concatenate(targets)
-    p = np.concatenate(preds)
-    fpr, tpr, _ = roc_curve(t, p)
+
+    fpr, tpr, _ = roc_curve(results[resp_col], results[pred_col])
     roc_auc = auc(fpr, tpr)
     plt.plot(fpr, tpr, '-', color='darkorange', lw=1.5, label='ROC curve (area = %0.2f)' % roc_auc,)
     plt.plot([0, 1], [0, 1], color='navy', lw=1.5, linestyle='--')
@@ -29,45 +26,62 @@ def plot_roc_curve(preds, targets, fname = './results/roc_curve.png'):
     plt.savefig(fname)
 
 
-def plot_shape_functions(partials, features, names, nrows = 2, max_k = 10, fname = './results/shape_functions.png'):
-    assert len(partials) == len(features)
-    
-    n = len(names)
+def plot_shape_functions(results, features, nrows = 2, max_k = 10, fname = './results/shape_functions.png'):
+    n = len(features)
     ncols = n // nrows
     plt.clf()
-    fig, axes = plt.subplots(nrows = nrows, ncols = ncols, figsize = (10, 5))
-    for i in range(n):
-
+    fig, axes = plt.subplots(nrows = nrows, ncols = ncols, figsize = (10, 7))
+    for i, feature in enumerate(features):
         r = i // ncols
-        c = i % ncols     
-
-        x = np.concatenate([f[:,i] for f in features])        
-        x_points = np.linspace(x.min(), x.max(), 100)        
-        interpolates = []
-        for j in range(len(partials)):
-            x = features[j][:,i]
-            y = partials[j][:,i]
-            idx = x.argsort()
-            x = x[idx]
-            y = y[idx]
-            axes[r, c].plot(x, y, '-', color = 'orange', lw = 0.5)
-
-            interpolates.append(np.interp(x_points, x, y))
-
-        averages = [np.average(x) for x in zip(*interpolates)]
-        axes[r, c].plot(x_points, averages, '-', color = 'orange', lw = 1.5)
+        c = i % ncols
         
-        x_, n = np.unique(x, return_counts=True) 
         twin = axes[r, c].twinx()
-        if len(x_) <= max_k:
-            twin.bar(x_, n, width = 1, alpha = .25)    
-        else:            
-            twin.hist(x, alpha = .25)
-            
-        axes[r, c].grid()
-        axes[r, c].set_xlabel(names[i].replace('_', ' '))
 
+        if results[feature].dtype == object:
+            xlab_rot = 90
+            agg_plot = 'bar'
+        else:
+            xlab_rot = 0
+            agg_plot = 'hist'
+
+
+        results.sort_values(feature, inplace = True)
+        for _, res in results.groupby('replicate'):
+            x = res[feature]
+            y = res[feature + '_partial']
+            axes[r, c].plot(x, y, '-', color = 'orange', lw = 0.25)
+
+        x = results.pivot_table(
+            index = feature, 
+            columns = 'replicate', 
+            values = feature + '_partial'
+        )
+
+        x = (
+            x
+            .interpolate()
+            .mean(axis = 1)
+            .sort_index()
+        )
+
+        x.plot(ax = axes[r, c], rot=xlab_rot)
         
+        # Plot frequencies
+        x = results[feature]
+        if agg_plot == 'bar':
+            x.value_counts().plot.bar(
+                width = 1, 
+                alpha = .15, 
+                ax = twin
+            )    
+            twin.set_ylabel('frequnecy')
+
+        elif agg_plot == 'hist':           
+            x.plot.hist(alpha = .15, ax = twin)
+                    
+        axes[r, c].grid(True)
+        axes[r, c].set_ylabel('Partial logit')
+        axes[r, c].set_xlabel(feature.replace('_', ' '))
 
     plt.tight_layout()
     plt.savefig(fname)

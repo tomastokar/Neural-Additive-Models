@@ -2,11 +2,11 @@ import numpy as np
 import pandas as pd
 
 from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import KFold
+from sklearn.model_selection import train_test_split
 
 from nam import NAM
 from utils import CompasData, train_model, eval_model
-from plots import plot_roc_curve, plot_shape_functions
+from plots import plot_roc_curves, plot_shape_functions
 from responsibly.dataset import COMPASDataset
 
 def load_data():
@@ -33,28 +33,39 @@ def encode_data(data):
     return data, encoders
 
 
+def decode_data(data, encoders):
+    for col, encoder in encoders.items():
+        data.loc[:,col] = encoder.inverse_transform(data[col])
+    return data
+
+    
+
 def main():
     data = load_data()
     cols = data.columns
 
+    features, response = cols[:-1], cols[-1]
     data, encoders = encode_data(data)
-    X = data.iloc[:,:-1].values
-    y = data.iloc[:, -1].values
 
-    predicts, partials, features, targets = [], [], [], []
-    cv = KFold(n_splits = 3, shuffle=False)
-    for i, (train_idx, test_idx) in enumerate(cv.split(X, y)):
+    no_replicates = 20
+    no_testings = 500
+    results = []
+    for i in range(no_replicates):        
+        print('\t===== Replicate no. {} =====\n'.format(i + 1))
 
-        print('\t===== Fold no. {} =====\n'.format(i + 1))
-    
+        d_train, d_test = train_test_split(
+            data, 
+            test_size=no_testings
+        )    
+
         data_train = CompasData(
-            X[train_idx], 
-            y[train_idx]
+            d_train[features].values, 
+            d_train[response].values
         )
-        
+
         data_test = CompasData(
-            X[test_idx], 
-            y[test_idx]
+            d_test[features].values, 
+            d_test[response].values
         )        
     
         model = NAM(
@@ -70,7 +81,7 @@ def main():
             model, 
             data_train, 
             batch_size = 16, 
-            max_epochs=10, 
+            max_epochs=20, 
             verbosity=20, 
             learning_rate=2e-4,
             weight_decay=0.,
@@ -81,14 +92,23 @@ def main():
             model, 
             data_test
         )
-
-        predicts.append(y_)
-        partials.append(p_)
-        features.append(X[test_idx])
-        targets.append(y[test_idx])
+        
+        res = (
+            pd
+            .DataFrame(p_, columns = features, index = d_test.index)
+            .add_suffix('_partial')
+            .join(d_test)
+            .assign(is_recid_proba = y_)   
+            .assign(replicate = i)         
+        )
+        
+        results.append(res)
     
-    plot_roc_curve(predicts, targets)
-    plot_shape_functions(partials, features, cols[:-1])    
+    results = pd.concat(results)
+    results = decode_data(results, encoders)
+
+    plot_roc_curves(results, 'is_recid_proba', 'is_recid')
+    plot_shape_functions(results, features)    
 
 if __name__ == '__main__':
     main()
