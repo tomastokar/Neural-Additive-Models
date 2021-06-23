@@ -3,7 +3,7 @@ Pytorch implementation of neural additive model
 
 ## Description
 <p align="justify">
-This repository contains Pytorch implementation of neural additive models (NAMs) as previously described in [Agarwal et al.] along its demonstration across four different datasets obtained from <code>responsibly.ai</code> (https://docs.responsibly.ai/index.html)
+This repository contains Pytorch implementation of neural additive models (NAMs) as previously described in [Agarwal et al., 2020] along its demonstration across four different datasets obtained from <code>responsibly.ai</code> (https://docs.responsibly.ai/index.html)
 </p>
 
 These datasets include:
@@ -12,9 +12,21 @@ These datasets include:
   * Adults Dataset
   * FICO 
 
-## Installation and running
+## Requirements
 
-conda create environment 
+  * python 3.7+
+  * pytorch 1.5+
+
+
+To run the demos, you may first want to create conda environment and to install all dependencies:
+```S
+conda env create -f environment.yml
+```
+
+You can then activate the environment:
+```S
+conda activate PyNam
+```
 
 ## COMPAS
 
