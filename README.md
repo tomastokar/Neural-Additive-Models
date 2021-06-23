@@ -35,10 +35,14 @@ python compas_demo.py
 ```
 
 <p align="justify">
-A routine where NAM model is repeatedly initialized, trained and subsequently tested using randomly selected subsets of data will be executed. Obtained results include visualization of the receiver oparating characteristic curve and visualization of the shape functions, which describe how individual features affect prediction of the model.
+This executes a routine where NAM model is repeatedly initialized, trained and subsequently tested using randomly selected subsets. Obtained results include visualization of the receiver oparating characteristic curve and visualization of the shape functions learned by individual NAMs. 
 </p>
 
 ![compas_roc](results/roc_curve.png?raw=true "COMPAS - ROC curve")
+
+<p align="justify">
+Shape functions describe how individual features affect prediction of the model. Thin lines represent different shape functions from the individual NAMs, to show their agreement. The thick lines represent aggregated shape function. Histograms in the background shows distribution of values of the individual features.
+</p>
 
 ![compas_roc](results/shape_functions.png?raw=true "COMPAS - shape functions")
 
