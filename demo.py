@@ -4,9 +4,9 @@ import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 
-from nam import NAM
-from utils import CompasData, train_model, eval_model
-from plots import plot_roc_curves, plot_shape_functions
+from src.nam import NAM
+from src.utils import CompasData, train_model, eval_model
+from src.plots import plot_roc_curves, plot_shape_functions
 from responsibly.dataset import COMPASDataset
 
 def load_data():
