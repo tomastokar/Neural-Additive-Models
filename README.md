@@ -14,8 +14,8 @@ These datasets include:
 
 ## Requirements
 
-  * python 3.7+
-  * pytorch 1.5+
+  * python >= 3.7
+  * pytorch >= 1.5
 
 
 To run the demos, you may first want to create conda environment and to install all dependencies:
