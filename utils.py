@@ -3,7 +3,6 @@ import torch
 import pandas as pd
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
-from plots import plot_roc_curve, plot_shape_functions
 
 class CompasData(Dataset):
     def __init__(self, X, y):
@@ -57,19 +56,11 @@ def train_model(model, data, max_epochs = 10, batch_size = 32, learning_rate = 1
         print('\n\t Epoch finished in {:1.2f} seconds!\n'.format(time.time() - start))
 
 
-def eval_model(model, data, feature_names):
+def eval_model(model, data):
     model.eval()
     with torch.no_grad():
-        y_, p_ = model(data.X)    
+        y_, p_ = model(data.X)   
+        y_ = y_.flatten().numpy()
+        p_ = p_.numpy()
+    return y_, p_
 
-    preds = y_.flatten().numpy()
-    targets = data.y.numpy()
-    plot_roc_curve(preds, targets)
-
-    features = data.X.numpy()
-    partials = p_.numpy()
-
-    features = pd.DataFrame(features, coumns = feature_names)
-    partials = pd.DataFrame(partials, coumns = feature_names)
-
-    plot_shape_functions(features, partials)    

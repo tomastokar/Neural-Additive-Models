@@ -18,25 +18,28 @@ def plot_roc_curve(preds, targets, fname = './results/roc_curve.png'):
     plt.savefig(fname)
 
 
-def plot_shape_functions(x, p, nrows = 2, fname = './results/shape_functions.png'):
-    assert x.shape == p.shape
+def plot_shape_functions(p, x, names, nrows = 2, fname = './results/shape_functions.png'):
+    assert p.shape == x.shape
+    assert p.shape[1] == len(names)
 
     n = x.shape[1]    
     ncols = n // nrows
     plt.clf()
     fig, axes = plt.subplots(nrows = nrows, ncols = ncols, figsize = (10, 5))
-    for i, col in range(x.columns):
-        x = x.sort_values(col)
-        p = p.loc[x.index]
+    for i in range(p.shape[1]):
+
         r = i // ncols
-        c = i % ncols                
-        axes[r, c].plot(x[col], p[col], 'o--')
+        c = i % ncols     
+
+        axes[r, c].plot(x[:,i], p[:,i], 'o', label = 'logit')
         axes[r, c].grid()
-        axes[r, c].set_xlabel(col.replace('_', ' '))
+        axes[r, c].set_xlabel(names[i].replace('_', ' '))
+        axes[r, c].legend() 
 
         twin = axes[r, c].twinx()
-        twin.hist(x[col], alpha = .5)
-        
+        twin.hist(x[:,i], alpha = .5, label = 'hist')
+        twin.legend()
+
     plt.tight_layout()
     plt.savefig(fname)
 
