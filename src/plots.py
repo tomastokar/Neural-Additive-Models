@@ -26,7 +26,7 @@ def plot_roc_curves(results, pred_col, resp_col, fname = './results/roc_curve.pn
     plt.savefig(fname)
 
 
-def plot_shape_functions(results, features, nrows = 2, size = (10, 10), fname = './results/shape_functions.png'):
+def plot_shape_functions(results, features, nrows = 1, size = (8, 10), fname = './results/shape_functions.png'):
     n = len(features)
     ncols = n // nrows
     plt.clf()

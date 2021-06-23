@@ -17,3 +17,8 @@ compas:
     learning_rate : 2.e-4
     weight_decay : 0.
     output_penalty : .2
+  plotting:
+    nrows : 2
+    size:
+      - 10
+      - 8

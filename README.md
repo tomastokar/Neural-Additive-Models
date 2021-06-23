@@ -35,7 +35,12 @@ COMPAS demo can be run by:
 python compas_demo.py
 ```
 
+Obtained results include receiver oparating characteristic curve: 
+
 ![compas_roc](results/roc_curve.png?raw=true "COMPAS - ROC curve")
+
+And partials (also refered to as shape functions), which describe how individual features
+affect prediction of the model.
 
 ![compas_roc](results/shape_functions.png?raw=true "COMPAS - shape functions")
 
