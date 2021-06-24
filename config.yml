@@ -18,7 +18,14 @@ compas:
     weight_decay : 0.
     output_penalty : .2
   plotting:
-    nrows : 2
-    size:
-      - 10
-      - 8
+    roc:
+      size:
+        - 5
+        - 3
+      fname : './results/compas_roc.png'
+    shapes:
+      nrows : 2
+      size:
+        - 10
+        - 8
+      fname : './results/compas_shapes.png'

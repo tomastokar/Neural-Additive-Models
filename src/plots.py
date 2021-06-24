@@ -4,9 +4,10 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc
 
 
-def plot_roc_curves(results, pred_col, resp_col, fname = './results/roc_curve.png'):
+def plot_roc_curves(results, pred_col, resp_col, size = (7, 5), fname = None):
     plt.clf()
-    plt.figure()
+    plt.style.use('classic')
+    plt.figure(figsize=size)
     
     for _, res in results.groupby('replicate'):
         fpr, tpr, _ = roc_curve(res[resp_col], res[pred_col])      
@@ -23,10 +24,14 @@ def plot_roc_curves(results, pred_col, resp_col, fname = './results/roc_curve.pn
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
     plt.legend(loc="lower right")
-    plt.savefig(fname)
+    if fname is not None:
+        plt.savefig(fname)
+    else:
+        plt.show()    
 
 
-def plot_shape_functions(results, features, nrows = 1, size = (8, 10), fname = './results/shape_functions.png'):
+
+def plot_shape_functions(results, features, nrows = 1, size = (8, 10), fname = None):
     n = len(features)
     ncols = n // nrows
     plt.clf()
@@ -84,7 +89,10 @@ def plot_shape_functions(results, features, nrows = 1, size = (8, 10), fname = '
         axes[r, c].set_xlabel(feature.replace('_', ' '))
 
     plt.tight_layout()
-    plt.savefig(fname)
+    if fname is not None:
+        plt.savefig(fname)
+    else:
+        plt.show()
 
 
 

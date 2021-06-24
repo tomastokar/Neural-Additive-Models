@@ -88,15 +88,14 @@ def main(args):
 
     plot_roc_curves(
         results, 
-        'is_recid_proba',
+        'is_recid_proba', 
         'is_recid', 
-        **args['plotting']['roc']
-    )
+        './results/compas_roc.png')
 
     plot_shape_functions(
         results, 
         features, 
-        **args['plotting']['shapes']
+        **args['plotting']
     )    
 
 if __name__ == '__main__':
