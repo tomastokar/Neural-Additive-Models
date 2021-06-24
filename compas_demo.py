@@ -102,4 +102,5 @@ def main(args):
 if __name__ == '__main__':
     with open('./config.yml', 'r') as f:
         args = yaml.safe_load(f)
-    main(args['compas'])
+        args = args['compas']
+    main(args)

@@ -24,8 +24,8 @@ compas:
         - 3
       fname : './results/compas_roc.png'
     shapes:
-      nrows : 2
+      nrows : 3
       size:
         - 10
-        - 8
+        - 10
       fname : './results/compas_shapes.png'

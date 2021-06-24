@@ -35,26 +35,25 @@ def plot_shape_functions(results, features, nrows = 1, size = (8, 10), fname = N
     n = len(features)
     ncols = n // nrows
     plt.clf()
+    plt.style.use('classic')
     fig, axes = plt.subplots(nrows = nrows, ncols = ncols, figsize = size)
     for i, feature in enumerate(features):
         r = i // ncols
         c = i % ncols
         
-        twin = axes[r, c].twinx()
-
-        if results[feature].dtype == object:
-            xlab_rot = 90
-            agg_plot = 'bar'
-        else:
-            xlab_rot = 0
-            agg_plot = 'hist'
-
-
         results.sort_values(feature, inplace = True)
         for _, res in results.groupby('replicate'):
-            x = res[feature]
-            y = res[feature + '_partial']
-            axes[r, c].plot(x, y, '-', color = 'orange', lw = 0.25)
+            x = (
+                res[[feature, feature + '_partial']]
+                .drop_duplicates(subset = feature)
+                .set_index(feature)
+            )
+
+            x.plot.line(
+                ax = axes[r, c], 
+                color = 'orange', 
+                lw = 0.25
+            )
 
         x = results.pivot_table(
             index = feature, 
@@ -66,27 +65,42 @@ def plot_shape_functions(results, features, nrows = 1, size = (8, 10), fname = N
             x
             .interpolate()
             .mean(axis = 1)
+            .rename(feature + '_partial')
             .sort_index()
         )
 
-        x.plot(ax = axes[r, c], rot=xlab_rot)
+        x.plot.line(
+            ax = axes[r, c], 
+            color = 'orange', 
+            lw = 1.5
+        )
         
-        # Plot frequencies
+        # Plot frequencies        
+        twin = axes[r, c].twinx()
         x = results[feature]
-        if agg_plot == 'bar':
+        if x.dtype == object:
             x.value_counts().plot.bar(
                 width = 1, 
                 alpha = .15, 
-                ax = twin
+                ax = twin,
             )    
-            twin.set_ylabel('frequnecy')
 
-        elif agg_plot == 'hist':           
-            x.plot.hist(alpha = .15, ax = twin)
+            labs = [l.get_text() for l in twin.get_xticklabels()]
+            axes[r, c].set_xticklabels(labs, rotation=45, ha='right')
+            
+        else:
+            x.plot.hist(
+                alpha = .15, 
+                ax = twin
+            )
+        twin.set_ylabel('frequnecy')
+
                     
         axes[r, c].grid(True)
         axes[r, c].set_ylabel('Shape functions')
-        axes[r, c].set_xlabel(feature.replace('_', ' '))
+        axes[r, c].xaxis.label.set_visible(False)
+        axes[r, c].set_title(feature.replace('_', ' '))
+        axes[r, c].get_legend().remove()
 
     plt.tight_layout()
     if fname is not None:
