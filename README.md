@@ -50,6 +50,7 @@ Shape functions describe how individual features affect prediction of the model.
     - German Credit Dataset (classification, responsibly)
     - Adults Dataset (classification, responsibly)
     - California house prices (regression, sklearn)
+    - Boston house prices (regression, sklearn)
     - Breast cancer (classfiication, sklearn)
     - Diabetes (regression, sklearn)
 

@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
 
-class CompasData(Dataset):
+class TabularData(Dataset):
     def __init__(self, X, y):
         assert len(X) == len(y)
         n, m = X.shape
@@ -33,8 +33,8 @@ def train_model(model, data, max_epochs = 10, batch_size = 32, learning_rate = 1
         lr = learning_rate,
         weight_decay = weight_decay
     )    
-    
-    loss = nn.BCELoss(reduction='none')
+
+    loss = nn.BCELoss(reduction='none')            
     no_batches = len(loader)
     for epoch in range(max_epochs):
         start = time.time()
