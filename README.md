@@ -47,9 +47,11 @@ Shape functions describe how individual features affect prediction of the model.
 ![compas_roc](results/compas_shapes.png?raw=true "COMPAS - shape functions")
 
 ## TODO
-    - German Credit Dataset
-    - Adults Dataset
-    - FICO 
+    - German Credit Dataset (classification, responsibly)
+    - Adults Dataset (classification, responsibly)
+    - California house prices (regression, sklearn)
+    - Breast cancer (classfiication, sklearn)
+    - Diabetes (regression, sklearn)
 
 
 ## References
