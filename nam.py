@@ -1,5 +1,4 @@
 from numpy.lib.function_base import append
-from pandas.io.parsers import FixedWidthReader
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
