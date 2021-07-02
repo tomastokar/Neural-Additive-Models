@@ -1,4 +1,4 @@
-no_replicates : 5
+no_replicates : 100
 test_size : 500
 model:
   no_features : 6
