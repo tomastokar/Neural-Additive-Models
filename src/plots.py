@@ -30,6 +30,23 @@ def plot_roc_curves(results, pred_col, resp_col, size = (7, 5), fname = None):
         plt.show()    
 
 
+def plot_prediction_plot(results, pred_col, resp_col, size = (7, 5), fname = None):
+    plt.clf()
+    plt.style.use('classic')
+    plt.figure(figsize=size)
+
+    x = results[pred_col]
+    y = results[resp_col]
+    plt.scatter(x, y, color='darkorange', lw=1.0)
+    plt.plot([y.min(), y.max()], [y.min(), y.max()], color='navy', lw=1.5, linestyle='--')
+    plt.grid()
+    plt.xlabel('Prediction')
+    plt.ylabel('Target')
+    if fname is not None:
+        plt.savefig(fname)
+    else:
+        plt.show() 
+
 
 def plot_shape_functions(results, features, nrows = 1, size = (8, 10), fname = None):
     n = len(features)

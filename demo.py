@@ -77,7 +77,7 @@ def main(args):
             .DataFrame(p_, columns = features, index = d_test.index)
             .add_suffix('_partial')
             .join(d_test)
-            .assign(is_recid_proba = y_)   
+            .assign(prediction = y_)   
             .assign(replicate = i)         
         )
         
@@ -88,7 +88,7 @@ def main(args):
 
     plot_roc_curves(
         results, 
-        'is_recid_proba',
+        'prediction',
         'is_recid', 
         **args['plotting']['roc']
     )
@@ -102,5 +102,4 @@ def main(args):
 if __name__ == '__main__':
     with open('./config.yml', 'r') as f:
         args = yaml.safe_load(f)
-        args = args['compas']
     main(args)
