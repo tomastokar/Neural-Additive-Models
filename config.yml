@@ -1,4 +1,4 @@
-
+which_gpu : 1
 no_replicates : 5
 test_size : 500
 model:

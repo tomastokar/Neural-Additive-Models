@@ -19,7 +19,7 @@ class TabularData(Dataset):
         return self.X[idx], self.y[idx]
 
 
-def train_model(model, data, regression = False, max_epochs = 10, batch_size = 32, learning_rate = 1e-3, weight_decay = 5e-4, output_penalty = 0., verbosity = 20):
+def train_model(model, data, regression = False, max_epochs = 10, batch_size = 32, learning_rate = 1e-3, weight_decay = 5e-4, output_penalty = 0., verbosity = 20, device = 'cpu'):
     # Data loader
     loader = DataLoader(
         data, 
@@ -44,6 +44,9 @@ def train_model(model, data, regression = False, max_epochs = 10, batch_size = 3
     for epoch in range(max_epochs):
         start = time.time()
         for i, (x, y) in enumerate(loader):
+            x.to(device)
+            y.to(device)
+
             optimizer.zero_grad()                        
             y_, p_ = model(x)
             pen = torch.norm(p_, dim = 1)

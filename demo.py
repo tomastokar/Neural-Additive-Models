@@ -47,6 +47,12 @@ def main(args):
     features, response = cols[:-1], cols[-1]
     data, encoders = encode_data(data)
 
+    gpu = args['which_gpu']
+    device = torch.device(gpu if torch.cuda.is_available() else "cpu")
+    if torch.cuda.is_available():
+        torch.cuda.set_device(gpu)
+    print('Device:\t', device)
+
     results = []
     for i in range(args['no_replicates']):        
         print('\t===== Replicate no. {} =====\n'.format(i + 1))
@@ -68,8 +74,9 @@ def main(args):
     
         model = NAM(**args['model'])
         model = model.double()
+        model.to(device)
 
-        train_model(model, data_train, **args['training'])
+        train_model(model, data_train, device = device, **args['training'])
         y_, p_ = eval_model(model, data_test)
         
         res = (
