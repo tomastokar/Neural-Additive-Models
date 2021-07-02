@@ -9,9 +9,7 @@ dependencies:
    - scipy
    - pandas
    - scikit-learn
-   - cudatoolkit=9.2
    - pytorch=1.5
-   - torchvision
    - pyyaml
    - matplotlib
    - pip

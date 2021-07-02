@@ -1,5 +1,4 @@
-which_gpu : 1
-no_replicates : 5
+no_replicates : 100
 test_size : 500
 model:
   no_features : 6
@@ -13,7 +12,7 @@ model:
 training:
   regression : False
   batch_size : 16
-  max_epochs : 10
+  max_epochs : 20
   verbosity : 20
   learning_rate : 2.e-4
   weight_decay : 0.
