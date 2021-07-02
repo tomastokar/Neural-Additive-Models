@@ -3,22 +3,11 @@ Pytorch implementation of neural additive model
 
 ## Description
 <p align="justify">
-This repository contains Pytorch implementation of neural additive models (NAMs) as previously described in [Agarwal et al., 2020] along its demonstration across four different datasets obtained from <code>responsibly.ai</code> (https://docs.responsibly.ai/index.html) [Barocas et al., 2017].
+This repository contains Pytorch implementation of neural additive models (NAMs) as previously described in [Agarwal et al., 2020] along its demonstration on COMPAS datasets obtained from <code>responsibly.ai</code> (https://docs.responsibly.ai/index.html) [Barocas et al., 2017].
 </p>
 
-These datasets include:
-  * COMPAS
-  * German Credit Dataset
-  * Adults Dataset
-  * FICO 
-
-## Requirements
-
-  * python >= 3.7
-  * pytorch >= 1.5
-
-
-To run the demos, you may first want to create conda environment and to install all dependencies:
+## Running
+To run the demo, you may first want to create conda environment and to install all dependencies:
 ```S
 conda env create -f environment.yml
 ```
@@ -28,10 +17,9 @@ You can then activate the environment:
 conda activate PyNam
 ```
 
-## Running
-COMPAS demo, and analogously other demos, can be run by:
+Run the demo:
 ```
-python compas_demo.py
+python demo.py
 ```
 
 <p align="justify">
@@ -45,14 +33,6 @@ Shape functions describe how individual features affect prediction of the model.
 </p>
 
 ![compas_roc](results/compas_shapes.png?raw=true "COMPAS - shape functions")
-
-## TODO
-    - German Credit Dataset (classification, responsibly)
-    - Adults Dataset (classification, responsibly)
-    - California house prices (regression, sklearn)
-    - Boston house prices (regression, sklearn)
-    - Breast cancer (classfiication, sklearn)
-    - Diabetes (regression, sklearn)
 
 
 ## References
